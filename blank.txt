@@ -1,0 +1,27 @@
+query = update.callback_query
+    user_id = query.from_user.id
+
+    if query.data == 'yes':
+        context.bot.send_message(chat_id=user_id, text="Please enter your mail ID to proceed further:")
+        context.user_data['user_id'] = update.effective_user.id
+        
+        custom_user_id_counter += 1
+        return "AWAITING_EMAIL"
+    elif query.data == 'no':
+        context.bot.send_message(chat_id=user_id, text="Thank you for Visiting!")
+        return ConversationHandler.END
+
+
+
+query.edit_message_text('''If you want to collaborate with us:\n
+                                1.We charge 1500 for 3 reels and multiple stories
+                                2.For barter collabs we post 1 reel and 1 post only
+                                ''')
+
+keyboard = [
+        [InlineKeyboardButton("YES", callback_data='yes')],
+        [InlineKeyboardButton("NO", callback_data='no')],
+        
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text("would you to Proceed further with US:", reply_markup=reply_markup)
